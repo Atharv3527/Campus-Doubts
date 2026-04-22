@@ -24,18 +24,27 @@ const sizes = {
 
 const Button = ({
   children,
+  as,
   variant = "primary",
   size = "md",
   className,
   ...props
 }) => {
+  const Component = as || "button";
+  const componentProps = {
+    className: clsx(baseClasses, variants[variant], sizes[size], className),
+    ...props,
+  };
+
+  // Default native button behavior for forms unless caller overrides it.
+  if (Component === "button" && componentProps.type == null) {
+    componentProps.type = "button";
+  }
+
   return (
-    <button
-      className={clsx(baseClasses, variants[variant], sizes[size], className)}
-      {...props}
-    >
+    <Component {...componentProps}>
       {children}
-    </button>
+    </Component>
   );
 };
 
