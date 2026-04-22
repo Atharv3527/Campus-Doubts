@@ -19,7 +19,12 @@ dotenv.config();
 const app = express();
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://campus-doubts.vercel.app"],
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 connectDB();
