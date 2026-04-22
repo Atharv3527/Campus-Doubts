@@ -1,6 +1,6 @@
 // src/App.jsx
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import { AuthProvider } from "./context/AuthContext";
 import Landing from "./pages/Landing";
@@ -14,10 +14,17 @@ import Profile from "./pages/Profile";
 import useAuth from "./hooks/useAuth";
 
 const PrivateRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+  const { isAuthenticated, authReady } = useAuth();
+  const location = useLocation();
+
+  if (!authReady) {
+    return null;
   }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+  }
+
   return children;
 };
 

@@ -6,11 +6,22 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [authReady, setAuthReady] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("campus_user");
-    if (stored) {
+    if (!stored) {
+      setAuthReady(true);
+      return;
+    }
+
+    try {
       setUser(JSON.parse(stored));
+    } catch {
+      localStorage.removeItem("campus_user");
+      setUser(null);
+    } finally {
+      setAuthReady(true);
     }
   }, []);
 
@@ -50,8 +61,9 @@ export const AuthProvider = ({ children }) => {
         user,
         login,
         googleLogin,
-        updateProfile, 
+        updateProfile,
         logout,
+        authReady,
         isAuthenticated: !!user,
       }}
     >
