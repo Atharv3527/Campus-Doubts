@@ -41,11 +41,7 @@ const Button = ({
     componentProps.type = "button";
   }
 
-  return (
-    <Component {...componentProps}>
-      {children}
-    </Component>
-  );
+  return <Component {...componentProps}>{children}</Component>;
 };
 
 export default Button;
