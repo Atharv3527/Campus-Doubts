@@ -1,8 +1,14 @@
 // frontend/src/services/api.js
 import axios from "axios";
 
-export const API_BASE =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api";
+const rawApiBase = (import.meta.env.VITE_API_BASE_URL || "").trim();
+const fallbackApiBase = "http://localhost:5000/api";
+
+const normalizedApiBase = (rawApiBase || fallbackApiBase).replace(/\/+$/, "");
+
+export const API_BASE = normalizedApiBase.endsWith("/api")
+  ? normalizedApiBase
+  : `${normalizedApiBase}/api`;
 
 const api = axios.create({
   baseURL: API_BASE,
